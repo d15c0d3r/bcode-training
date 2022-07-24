@@ -3,35 +3,52 @@
   <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+  <script src="https://unpkg.com/react-error-boundary@1.2.5/dist/umd/react-error-boundary.js"></script>
   <script type="text/babel">
-    function UsernameForm() {
-      const [username, setUsername] = React.useState("");
+    const ErrorBoundary = ReactErrorBoundary.ErrorBoundary;
+    // class ErrorBoundary extends React.Component {
+    //   state = {error: null}
+    //   static getDerivedStateFromError(error) {
+    //     return {error}
+    //   }
+    //   render() {
+    //     const {error} = this.state
+    //     if (error) {
+    //       return <this.props.FallbackComponent error={error} />
+    //     }
 
-      function handleSubmit(event) {
-        event.preventDefault();
-        alert(`You entered: ${username}`);
-      }
+    //     return this.props.children
+    //   }
+    // }
 
-      function handleChange(event) {
-        setUsername(event.target.value.toLowerCase());
-      }
-
+    function ErrorFallback({ error }) {
       return (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="usernameInput">Username:</label>
-            <input
-              id="usernameInput"
-              type="text"
-              onChange={handleChange}
-              value={username}
-            />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+        <div>
+          <p>Something went wrong:</p>
+          <pre>{error.message}</pre>
+        </div>
       );
     }
 
-    ReactDOM.render(<UsernameForm />, document.getElementById("root"));
+    function Bomb() {
+      throw new Error("💥 CABOOM 💥");
+    }
+
+    function App() {
+      const [explode, setExplode] = React.useState(false);
+      return (
+        <div>
+          <div>
+            <button onClick={() => setExplode(true)}>💣</button>
+          </div>
+          <div>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              {explode ? <Bomb /> : "Push the button Max!"}
+            </ErrorBoundary>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.render(<App />, document.getElementById("root"));
   </script>
 </body>
