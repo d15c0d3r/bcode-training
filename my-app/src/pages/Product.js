@@ -72,8 +72,8 @@ export const Product = () => {
           quantity: prevCart[productData.id].quantity + 1,
         },
       }));
-      setItemsInStock((prevItemsInStock) => prevItemsInStock - 1);
     }
+    setItemsInStock((prevItemsInStock) => prevItemsInStock - 1);
   };
 
   const removeFromCart = () => {
