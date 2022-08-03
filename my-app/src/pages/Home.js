@@ -39,6 +39,34 @@ export const Home = () => {
             />
           </Link>
         ))}
+        {data.map((product) => (
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            key={product.id}
+            to={`/product/${product.id}`}
+          >
+            <ProductCard
+              image={product.image}
+              name={product.name}
+              price={product.price}
+              description={product.description}
+            />
+          </Link>
+        ))}
+        {data.map((product) => (
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            key={product.id}
+            to={`/product/${product.id}`}
+          >
+            <ProductCard
+              image={product.image}
+              name={product.name}
+              price={product.price}
+              description={product.description}
+            />
+          </Link>
+        ))}
       </div>
     </>
   );

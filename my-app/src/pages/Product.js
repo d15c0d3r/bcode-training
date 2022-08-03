@@ -1,70 +1,167 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useCart } from "../store/cartState";
 import { getProduct } from "../apis/ProductApis";
+import { getProductReviews } from "../apis/ReviewsApi";
 import "../styles/Product.css";
+import { Reviews } from "../components/Reviews";
+import { ReviewForm } from "../components/ReviewForm";
 
 export const Product = () => {
+  const [refetch, setRefetch] = useState(false);
+  const [cart, setCart] = useCart();
   const [img, setImg] = useState("");
+  const [itemsInStock, setItemsInStock] = useState(0);
   const params = useParams();
   const { id } = params;
 
-  const { isLoading, isError, error, data } = useQuery(
-    [`product`, id],
-    getProduct
-  );
-  console.log(data);
+  const {
+    isLoading: isProductLoading,
+    isError: isProductError,
+    error: productError,
+    data: productData,
+  } = useQuery([`product`, id], getProduct);
+
+  const {
+    isLoading: isReviewsLoading,
+    isError: isReviewsError,
+    error: reviewsError,
+    data: reviewsData,
+  } = useQuery([`reviews`, id, refetch], getProductReviews);
 
   useEffect(() => {
-    if (data) {
-      setImg(data.image);
+    if (productData && !img) {
+      const { image, quantity } = productData;
+      setImg(image);
+      cart[id]
+        ? setItemsInStock(quantity - cart[id].quantity)
+        : setItemsInStock(quantity);
     }
-  }, [data]);
+  }, [cart, productData, id, img]);
 
-  const onClickHandler = (image) => {
+  const handleVariantChange = (image) => {
     setImg(image);
   };
 
-  if (isLoading) {
+  const addToCart = () => {
+    if (!cart[productData.id]) {
+      setCart((prevCart) => {
+        let newCart = {
+          ...prevCart,
+
+          [productData.id]: {
+            image: productData.image,
+            name: productData.name,
+            price: productData.price,
+            description: productData.description,
+            totalPrice: productData.price,
+            quantity: 1,
+          },
+        };
+        return newCart;
+      });
+    } else {
+      setCart((prevCart) => ({
+        ...prevCart,
+        [productData.id]: {
+          ...prevCart[productData.id],
+          totalPrice:
+            (prevCart[productData.id].quantity + 1) *
+            prevCart[productData.id].price,
+          quantity: prevCart[productData.id].quantity + 1,
+        },
+      }));
+      setItemsInStock((prevItemsInStock) => prevItemsInStock - 1);
+    }
+  };
+
+  const removeFromCart = () => {
+    cart[productData.id].quantity === 1
+      ? setCart((prevCart) => {
+          let newCart = { ...prevCart };
+          delete newCart[productData.id];
+          return newCart;
+        })
+      : setCart((prevCart) => ({
+          ...prevCart,
+          [productData.id]: {
+            ...prevCart[productData.id],
+            totalPrice: prevCart[productData.id].totalPrice - productData.price,
+            quantity: prevCart[productData.id].quantity - 1,
+          },
+        }));
+    setItemsInStock((prevItemsInStock) => prevItemsInStock + 1);
+  };
+
+  const displayStockStatus = () => {
+    return itemsInStock === 0
+      ? `Unavailable`
+      : itemsInStock > 10
+      ? "Available"
+      : `Selling Fast`;
+  };
+
+  if (isProductLoading || isReviewsLoading) {
     return <h1>Loading..</h1>;
   }
-  if (isError) {
-    return <h1>{error.message}</h1>;
+  if (isProductError || isReviewsError) {
+    return (
+      <h1>
+        {productError.message} && {reviewsError.message}
+      </h1>
+    );
   }
 
-  const { name, image, price, quantity, description, variants } = data;
-
   return (
-    <div className="container">
-      <div className="bottle-img">
-        <img src={img} alt={description} />
-      </div>
-      <div className="bottle-info">
-        <h2>{name}</h2>
-        <p>{description}</p>
-        <p>
-          Price : <span className="price-text">$ {price}</span>
-        </p>
-        <p>
-          {quantity === 0
-            ? `Unavailable`
-            : quantity > 10
-            ? "Available"
-            : `Selling Fast`}
-        </p>
-        <div className="variants-color">
-          {variants.map((variant) => (
-            <div
-              className="button"
-              style={{ backgroundColor: variant.color }}
-              onClick={(e) => {
-                onClickHandler(variant.image);
-              }}
-            ></div>
-          ))}
+    <>
+      <div className="container">
+        <div className="product-container">
+          <div className="bottle-img">
+            <img src={img} alt={productData.description} />
+          </div>
+          <div className="bottle-info">
+            <h2>{productData.name}</h2>
+            <p>{productData.description}</p>
+            <p>
+              Price : <span className="price-text">$ {productData.price}</span>
+            </p>
+            <p>{displayStockStatus()}</p>
+            <div className="variants-color">
+              {productData.variants.map((variant, idx) => (
+                <div
+                  key={idx}
+                  className="button"
+                  style={{ backgroundColor: variant.color }}
+                  onClick={(e) => {
+                    handleVariantChange(variant.image);
+                  }}
+                ></div>
+              ))}
+            </div>
+            {!cart[productData.id] ? (
+              <button onClick={(e) => addToCart()}>Add to Cart</button>
+            ) : (
+              <div>
+                <button
+                  disabled={!cart[productData.id].quantity}
+                  onClick={(e) => removeFromCart()}
+                >
+                  -
+                </button>
+                {cart[productData.id].quantity}
+                <button disabled={!itemsInStock} onClick={(e) => addToCart()}>
+                  +
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-        <button>Add to Cart</button>
+        <div className="reviews-container">
+          <Reviews reviewsData={reviewsData} />
+          <ReviewForm id={productData.id} setRefetch={setRefetch} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
