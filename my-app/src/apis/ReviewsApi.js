@@ -1,16 +1,17 @@
 import axios from "axios";
 
 export const getProductReviews = async ({ queryKey }) => {
-  console.log("useQuery is called");
+  console.log("triggered", queryKey[1]);
   const { data } = await axios.get(
-    `https://obscure-refuge-62167.herokuapp.com/products/${queryKey[1]}/reviews`
+    `http://localhost:5000/api/review/${queryKey[1]}`
   );
+  console.log("product :", data);
   return data;
 };
 
-export const addProductReview = async ({ id: productId, review }) => {
-  const data = await axios.post(
-    `https://obscure-refuge-62167.herokuapp.com/products/${productId}/reviews`,
+export const addProductReview = ({ id: productId, review }) => {
+  const data = axios.post(
+    `http://localhost:5000/api/review/${productId}`,
     review
   );
   return data;

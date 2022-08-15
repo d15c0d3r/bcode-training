@@ -39,7 +39,7 @@ export const Home = () => {
             />
           </Link>
         ))}
-        {data.map((product) => (
+        {/* {data.map((product) => (
           <Link
             style={{ textDecoration: "none", color: "black" }}
             key={product.id}
@@ -66,7 +66,7 @@ export const Home = () => {
               description={product.description}
             />
           </Link>
-        ))}
+        ))} */}
       </div>
     </>
   );

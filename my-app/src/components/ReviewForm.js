@@ -1,33 +1,38 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProductReview } from "../apis/ReviewsApi";
 import "../styles/ReviewForm.css";
-import { errorSelector } from "recoil";
 
-export const ReviewForm = ({ id, setRefetch }) => {
+export const ReviewForm = ({ id, key }) => {
+  const queryClient = useQueryClient();
+
   const { isLoading, isSuccess, isError, error, mutate } = useMutation(
     ({ id, review }) => addProductReview({ id, review })
   );
-
-  useEffect(() => {
-    if (isSuccess) setRefetch(isSuccess);
-    return () => {};
-  }, [isSuccess, setRefetch]);
 
   const formik = useFormik({
     initialValues: { name: "", review: "", rating: "" },
     onSubmit: (values) => {
       console.log(values);
       console.log(id);
-      mutate({
-        id,
-        review: {
-          name: values.name,
-          review: values.review,
-          rating: values.rating,
+      if (Number(values.rating) <= 0 || Number(values.rating) >= 5) {
+        alert("Rating should be in the range of 1-5");
+        return;
+      }
+      mutate(
+        {
+          id,
+          review: {
+            name: values.name,
+            review: values.review,
+            rating: values.rating,
+          },
         },
-      });
+        {
+          onSuccess: async () => await queryClient.refetchQueries(key),
+        }
+      );
     },
   });
   if (isLoading) {

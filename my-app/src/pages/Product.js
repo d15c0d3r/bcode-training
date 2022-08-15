@@ -9,12 +9,12 @@ import { Reviews } from "../components/Reviews";
 import { ReviewForm } from "../components/ReviewForm";
 
 export const Product = () => {
-  const [refetch, setRefetch] = useState(false);
   const [cart, setCart] = useCart();
   const [img, setImg] = useState("");
   const [itemsInStock, setItemsInStock] = useState(0);
   const params = useParams();
   const { id } = params;
+  const key = [`reviews`, id];
 
   const {
     isLoading: isProductLoading,
@@ -28,7 +28,7 @@ export const Product = () => {
     isError: isReviewsError,
     error: reviewsError,
     data: reviewsData,
-  } = useQuery([`reviews`, id, refetch], getProductReviews);
+  } = useQuery(key, getProductReviews);
 
   useEffect(() => {
     if (productData && !img) {
@@ -72,8 +72,8 @@ export const Product = () => {
           quantity: prevCart[productData.id].quantity + 1,
         },
       }));
-      setItemsInStock((prevItemsInStock) => prevItemsInStock - 1);
     }
+    setItemsInStock((prevItemsInStock) => prevItemsInStock - 1);
   };
 
   const removeFromCart = () => {
@@ -128,7 +128,7 @@ export const Product = () => {
             </p>
             <p>{displayStockStatus()}</p>
             <div className="variants-color">
-              {productData.variants.map((variant, idx) => (
+              {productData.variants?.map((variant, idx) => (
                 <div
                   key={idx}
                   className="button"
@@ -159,7 +159,7 @@ export const Product = () => {
         </div>
         <div className="reviews-container">
           <Reviews reviewsData={reviewsData} />
-          <ReviewForm id={productData.id} setRefetch={setRefetch} />
+          <ReviewForm id={productData.id} key={key} />
         </div>
       </div>
     </>
