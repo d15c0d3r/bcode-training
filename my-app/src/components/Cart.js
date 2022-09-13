@@ -4,6 +4,7 @@ import "../styles/Cart.css";
 
 export const Cart = () => {
   const [cart] = useCart();
+  console.log(cart);
   const products = Object.keys(cart);
 
   if (products.length === 0) {

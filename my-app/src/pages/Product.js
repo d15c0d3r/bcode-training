@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../store/cartState";
 import { getProduct } from "../apis/ProductApis";
 import { getProductReviews } from "../apis/ReviewsApi";
-import "../styles/Product.css";
 import { Reviews } from "../components/Reviews";
 import { ReviewForm } from "../components/ReviewForm";
+import "../styles/Product.css";
 
 export const Product = () => {
   const [cart, setCart] = useCart();
