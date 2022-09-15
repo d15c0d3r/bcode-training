@@ -43,6 +43,11 @@ ninjaTwo = { name: "Teja", age: 55, beltColor: "orange" };
 //   skills: ["uppercut", "smash"],
 // };
 
+//FUNCTION SIGNATURE
+
+let sub: (a: number, b: number) => number;
+sub = (a, b) => b - a;
+
 const add = (a: number, b: number, c?: number | string) => {
   //   console.log(a + b);
   //   console.log(c);
@@ -58,16 +63,16 @@ const minus = (a: number, b: number): number => {
 const result = minus(10, 7);
 // console.log(result);
 
-//classes
-
+//CLASSES
 class Invoice {
   //   readonly client: string;
   //   private details: string;
   //   public amount: number;
 
-  //public => read and change variable inside and outside the class
-  //private => read and change variable only inside the class
-  //readonly => only read the variable inside and outside the class
+  // public => read and change variable inside and outside the class
+  // private => read and change variable only inside the class
+  // protecred => read and change variable only inside the class and its subclasses
+  // readonly => only read the variable inside and outside the class
 
   //   constructor(c: string, d: string, a: number) {
   //     this.client = c;

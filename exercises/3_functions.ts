@@ -90,21 +90,21 @@ export default (() => {
   // • Add explicit parameter types and return types
   // • Add a default greeting: "hello"
 
-  function greet(greeting) {
+  function greet(greeting: string = "hello") {
     return greeting.toUpperCase();
   }
 
-  //   const defaultGreeting = greet();
+  const defaultGreeting = greet();
   const portugueseGreeting = greet("Oi como vai!");
 
-  //   console.log("[Exercise 3.4]", defaultGreeting, portugueseGreeting);
+  console.log("[Exercise 3.4]", defaultGreeting, portugueseGreeting);
 
   // ======== Exercise 3.5 ========
   // Instructions:
   // • Add parameter type annotation
   // • Even though this function doesn't return, add an explicit return type
 
-  function layEggs(quantity, color) {
+  function layEggs(quantity: number, color: string): void {
     console.log(
       `[Exercise 3.5] You just laid ${quantity} ${color} eggs. Good job!`
     );
@@ -121,15 +121,15 @@ export default (() => {
   let multiply: (val1: number, val2: number) => number;
   let capitalize: (val: string) => string;
 
-  //   multiply = function (value: string): string {
-  //     return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
-  //   };
+  capitalize = (value: string): string => {
+    return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+  };
 
-  //   capitalize = function (x: number, y: number): number {
-  //     return x * y;
-  //   };
+  multiply = (x: number, y: number): number => {
+    return x * y;
+  };
 
-  //   console.log("[Exercise 3.6]", capitalize(`nifty ${multiply(5, 10)}`));
+  console.log("[Exercise 3.6]", capitalize(`nifty ${multiply(5, 10)}`));
 
   // ======== Exercise 3.7 ========
   // Currently, our function `pushToCollection` accepts *any* item and adds it,
@@ -151,19 +151,19 @@ export default (() => {
   const numberCollection: number[] = [];
   const stringCollection: string[] = [];
 
-  function pushToCollection(item, collection) {
+  function pushToCollection<T>(item: T, collection: T[]) {
     collection.push(item);
     return collection;
   }
 
   // Add some stuff to the collections
-  pushToCollection(false, stringCollection);
+  pushToCollection("false", stringCollection);
   pushToCollection("hi", stringCollection);
-  pushToCollection([], stringCollection);
+  pushToCollection("[]", stringCollection);
 
-  pushToCollection("1", numberCollection);
-  pushToCollection("2", numberCollection);
-  pushToCollection("3", numberCollection);
+  pushToCollection(1, numberCollection);
+  pushToCollection(2, numberCollection);
+  pushToCollection(3, numberCollection);
 
   const incrementedByTwo = numberCollection.map((num) => num + 2);
 
