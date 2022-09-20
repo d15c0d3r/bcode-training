@@ -168,13 +168,14 @@ export default (() => {
     swim(depth: number): void;
   }
 
-  interface BirdLike extends Flyer, EggLayer {}
+  // interface BirdLike extends Flyer, EggLayer {}
+  // interface FishLike extends Swimmer, EggLayer {}
 
-  interface FishLike extends Swimmer, EggLayer {}
-
+  type BirdLike = Flyer & EggLayer;
+  type FishLike = Swimmer & EggLayer;
   type Animal = BirdLike | FishLike;
 
-  //interface Animal extends BirdLike, FishLike {}
+  // interface Animal extends BirdLike, FishLike {}
 
   // add type alias(es) here
 

@@ -27,7 +27,6 @@ exports.default = (() => {
     class Animal {
         constructor(name) {
             this.name = name;
-            console.log("in snake constructor", this.name);
         }
         move(meters) {
             console.log(`${this.name} moved ${meters}m.`);
@@ -36,7 +35,7 @@ exports.default = (() => {
     class Snake extends Animal {
         constructor(name) {
             super(name);
-            this.name = name;
+            console.log("in snake constructor", this.name);
         }
         move(meters = 5) {
             console.log("Slithering...");
@@ -46,21 +45,20 @@ exports.default = (() => {
     class Pony extends Animal {
         constructor(name) {
             super(name);
-            this.name = name;
+            console.log("in pony constructor", this.name);
         }
         move(meters = 60) {
             console.log("Galloping...");
             super.move(meters);
         }
     }
+    console.log("ANIMAL exercise");
     const andrew = new Animal("Andrew the Animal");
     andrew.move(5);
     const sammy = new Snake("Sammy the Snake");
     sammy.move();
-    console.log(sammy.name);
     const pokey = new Pony("Pokey the Pony");
     pokey.move(34);
-    console.log(pokey.name);
     class Furniture {
         constructor(manufacturer = "IKEA") {
             this.manufacturer = manufacturer;
@@ -95,4 +93,11 @@ exports.default = (() => {
     console.log(Student.school);
     student.introduction();
 })();
-//# sourceMappingURL=5_classes.js.map
+const developer = {
+    name: "naga",
+    title: "developer",
+    language: "type-script",
+};
+const newEmployee = developer;
+console.log(newEmployee);
+//# sourceMappingURL=5_classes_copy.js.map

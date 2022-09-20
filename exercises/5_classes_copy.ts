@@ -68,17 +68,16 @@ export default (() => {
   // • Make it so that the name member cannot be publicly accessed
 
   class Animal {
-    protected constructor(protected name: string) {
-      console.log("in snake constructor", this.name);
-    }
-    move(meters: number) {
+    protected constructor(protected name: string) {}
+    move(meters) {
       console.log(`${this.name} moved ${meters}m.`);
     }
   }
 
   class Snake extends Animal {
-    constructor(protected name: string) {
+    constructor(name: string) {
       super(name);
+      console.log("in snake constructor", this.name);
     }
     move(meters: number = 5) {
       console.log("Slithering...");
@@ -89,17 +88,18 @@ export default (() => {
   }
 
   class Pony extends Animal {
-    constructor(protected name: string) {
+    constructor(name: string) {
       super(name);
+      console.log("in pony constructor", this.name);
     }
     move(meters: number = 60) {
       console.log("Galloping...");
       super.move(meters);
       // should call on parent's `move` method, w/ a default
-      // gallop of 60 meters
+      // slither of 5 meters
     }
   }
-
+  console.log("ANIMAL exercise");
   // The class Animal should not be instantiable.
   // Delete or comment out once the desired error is achieved.
   const andrew = new Animal("Andrew the Animal");
@@ -107,11 +107,11 @@ export default (() => {
 
   const sammy = new Snake("Sammy the Snake");
   sammy.move();
-  console.log(sammy.name); // Should return error
+  // console.log(sammy.name); // Should return error
 
   const pokey = new Pony("Pokey the Pony");
   pokey.move(34);
-  console.log(pokey.name); // Should return error
+  // console.log(pokey.name); // Should return error
 
   // ======== Exercise 5.5 ========
   // Goals:
@@ -167,3 +167,18 @@ export default (() => {
   console.log(Student.school);
   student.introduction();
 })();
+
+interface Employee {
+  name: string;
+  title: string;
+}
+
+const developer = {
+  name: "naga",
+  title: "developer",
+  language: "type-script",
+};
+
+const newEmployee: Employee = developer;
+
+console.log(newEmployee);
