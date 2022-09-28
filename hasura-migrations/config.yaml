@@ -1,0 +1,7 @@
+version: 3
+endpoint: https://legible-cobra-43.hasura.app
+admin_secret: Damj2iP4m5oIRIBmEtbGdd3t19rhFt5hbudajY4yJYt75i1QKZF4GrcTPxVtbNqq
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000
