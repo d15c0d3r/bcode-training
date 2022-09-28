@@ -1,8 +1,9 @@
 actions:
-  - name: userDetails
+  - name: userDetail
     definition:
       kind: ""
-      handler: http://localhost:3000
+      handler: https://enigmatic-gorge-91072.herokuapp.com/userDetails
+    comment: getting userDetails
 custom_types:
   enums: []
   input_objects: []

@@ -1,9 +1,10 @@
 type Query {
-  userDetails: userDetails
+  userDetail: userDetails
 }
 
 type userDetails {
   id: String
   name: String
+  email: String
 }
 
